@@ -1,0 +1,50 @@
+name: Utils for classroom
+description: Utility actons for github
+inputs:   
+  run-id:
+    description: 'workflow file to use'
+    required: true   
+  job-to-execute:
+    description: 'job to check'
+    required: true
+  steps-to-execute:
+    description: 'steps to check separated by ,'
+    required: true
+outputs:
+  stepsExecuted: 
+    description: Boolean with step executed By the run id    
+    value: ${{steps.stepsExecuted.outputs.stepExecuted}}
+runs:
+    using: 'composite'         
+    
+    steps:    
+      - name: Get jobs of the latest workflow run
+        id: stepsExecuted
+        uses: actions/github-script@v6
+        with:
+          script: |
+            const run_id = ${{inputs.run-id}};              
+            const jobsObj = await github.rest.actions.listJobsForWorkflowRun({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              run_id
+            });                       
+            const jobObj = jobsObj.data.jobs.find(job => 
+              job.name === "${{inputs.job-to-execute}}" &&
+              job.status === "completed" &&
+              job.conclusion === "success"
+            );
+            console.log('****')
+            console.log(jobObj)
+            const stepsArray = "${{inputs.steps-to-execute}}".split(',').map(step => step.trim());
+
+            const stepExecuted = stepsArray.every(stepName => 
+                jobObj.steps.some(step => 
+                    step.name === stepName &&
+                    step.status === "completed" &&
+                    step.conclusion === "success"
+                )
+              );
+            
+            core.setOutput('stepExecuted', stepExecuted);
+            console.log(stepExecuted)   
