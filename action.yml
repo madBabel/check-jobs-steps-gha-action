@@ -10,6 +10,14 @@ inputs:
   steps-to-execute:
     description: 'steps to check separated by ,'
     required: true
+  status:
+    description: 'status for step'
+    required: false
+    default: 'completed'
+  conclusion:
+    description: 'conclusion for step'
+    required: false
+    default: 'success'  
 outputs:
   stepsExecuted: 
     description: Boolean with step executed By the run id    
@@ -31,8 +39,7 @@ runs:
             });                       
             const jobObj = jobsObj.data.jobs.find(job => 
               job.name === "${{inputs.job-to-execute}}" &&
-              job.status === "completed" &&
-              job.conclusion === "success"
+              job.status === "completed"
             );
             console.log('****')
             console.log(jobObj)
@@ -41,8 +48,8 @@ runs:
             const stepExecuted = stepsArray.every(stepName => 
                 jobObj.steps.some(step => 
                     step.name === stepName &&
-                    step.status === "completed" &&
-                    step.conclusion === "success"
+                    step.status === "${{inputs.status}}" &&
+                    step.conclusion === "${{inputs.conclusion}}"
                 )
               );
             
