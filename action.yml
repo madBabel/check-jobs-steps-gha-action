@@ -38,7 +38,7 @@ runs:
               run_id
             });                       
             const jobObj = jobsObj.data.jobs.find(job => 
-              job.name === "${{inputs.job-to-execute}}" &&
+              job.name === "${{inputs.job-to-execute}}asdadad" &&
               job.status === "completed"
             );
             console.log(jobObj)
