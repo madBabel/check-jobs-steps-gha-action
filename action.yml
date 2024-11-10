@@ -43,12 +43,11 @@ runs:
             );
             console.log(jobObj)
             console.log("**")
-            console.log(jobObj==undefinded)
-            console.log("**")
-            console.log(!jobObj==undefinded)
-            console.log("**")
+            console.log(jobObj== 'undefinded' )
+            console.log("**")               
+            console.log(jobObj != 'undefinded' )
             if ("${{inputs.steps-to-execute}}" == "allStepsforJob") {
-              core.setOutput('stepExecuted', !jobObj === undefined);
+              core.setOutput('stepExecuted', jobObj != 'undefined');
               return ;
             }
             const stepsArray = "${{inputs.steps-to-execute}}".split(',').map(step => step.trim());
