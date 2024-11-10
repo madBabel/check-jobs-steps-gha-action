@@ -38,16 +38,12 @@ runs:
               run_id
             });                       
             const jobObj = jobsObj.data.jobs.find(job => 
-              job.name === "${{inputs.job-to-execute}}asdadad" &&
+              job.name === "${{inputs.job-to-execute}}" &&
               job.status === "completed"
-            );
-            console.log(jobObj)
-            console.log("**")
-            console.log(jobObj== 'undefinded' )
-            console.log("**")               
-            console.log(jobObj != 'undefinded' )
+            );          
             if ("${{inputs.steps-to-execute}}" == "allStepsforJob") {
               core.setOutput('stepExecuted', jobObj != 'undefined');
+              console.log(jobObj != 'undefined')   
               return ;
             }
             const stepsArray = "${{inputs.steps-to-execute}}".split(',').map(step => step.trim());
