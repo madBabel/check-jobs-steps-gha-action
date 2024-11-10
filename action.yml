@@ -9,7 +9,7 @@ inputs:
     required: true
   steps-to-execute:
     description: 'steps to check separated by ,'
-    required: true
+    default: 'allStepsforJob'
   status:
     description: 'status for step'
     required: false
@@ -40,9 +40,12 @@ runs:
             const jobObj = jobsObj.data.jobs.find(job => 
               job.name === "${{inputs.job-to-execute}}" &&
               job.status === "completed"
-            );
-            console.log('****')
-            console.log(jobObj)
+            );          
+            if ("${{inputs.steps-to-execute}}" == "allStepsforJob") {
+              core.setOutput('stepExecuted', jobObj != 'undefined');
+              console.log(jobObj != 'undefined')   
+              return ;
+            }
             const stepsArray = "${{inputs.steps-to-execute}}".split(',').map(step => step.trim());
 
             const stepExecuted = stepsArray.every(stepName => 
