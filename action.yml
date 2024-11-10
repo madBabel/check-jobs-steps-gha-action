@@ -41,6 +41,12 @@ runs:
               job.name === "${{inputs.job-to-execute}}" &&
               job.status === "completed"
             );
+            console.log(jobObj)
+            console.log("**")
+            console.log(jobObj==undefinded)
+            console.log("**")
+            console.log(!jobObj==undefinded)
+            console.log("**")
             if ("${{inputs.steps-to-execute}}" == "allStepsforJob") {
               core.setOutput('stepExecuted', !jobObj === undefined);
               return ;
