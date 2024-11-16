@@ -45,9 +45,8 @@ runs:
               core.setOutput('stepExecuted', jobObj != 'undefined');
               console.log(jobObj != 'undefined')   
               return ;
-            }
-            const stepsArray = "${{inputs.steps-to-execute}}".split(',').map(step => step.trim());
-
+            }            
+            const stepsArray = "${{inputs.steps-to-execute}}".split(',');            
             const stepExecuted = stepsArray.every(stepName => 
                 jobObj.steps.some(step => 
                     step.name === stepName &&
